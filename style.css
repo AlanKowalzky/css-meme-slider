@@ -131,3 +131,31 @@ body {
   background-color: #007bff; /* Kolor aktywnego indykatora */
   transform: scale(1.2);
 }
+
+📱 Krok 6: Responsywność (Media Queries)
+Jednostki px są dozwolone tylko w regułach @media. Układ na desktopie i mobile różni się kolejnością elementów (np. napisy pod kontrolkami lub odwrotnie) – najwygodniej zarządzać tym poprzez właściwość order we Flexboksie kontenera głównego.
+
+CSS
+/* Wersja mobilna (Sprawdzana od 500px wzwyż) */
+@media (min-width: 500px) {
+  .slider-container {
+    padding: 10px; /* Dozwolone px wewnątrz media queries */
+  }
+  .caption-text {
+    font-size: 1rem;
+  }
+}
+
+/* Wersja desktopowa (Sprawdzana od 1024px wzwyż) */
+@media (min-width: 1024px) {
+  .slider-container {
+    max-width: 60rem;
+  }
+  /* Przykładowa zmiana kolejności elementów na desktopie, jeśli design tego wymaga: */
+  .captions-container {
+    order: 2;
+  }
+  .controls-container {
+    order: 3;
+  }
+}
