@@ -38,12 +38,12 @@ body {
   flex-direction: column;
 }
 
-/* Okno kadrowania obrazu */
+/* Okno kadrowania obrazu - zaokrąglone rogi bez białej ramki */
 .slider-window {
   width: 100%;
-  aspect-ratio: 16 / 9;
   overflow: hidden;
-  border: 4px solid var(--text-color);
+  border: none;
+  border-radius: 12px;
   box-sizing: border-box;
 }
 
@@ -58,62 +58,68 @@ body {
 /* Pojedynczy slajd */
 .slide-item {
   width: 25%;
-  height: 100%;
 }
 
+/* Obrazek - dopasowuje wysokość automatycznie, zachowując proporcje */
 .slide-item img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
 }
 
 /* ==========================================================================
-   3. METADANE: PODPISY I KONTROLER
+   3. METADANE: PODPISY I KONTROLER (POPRAWIONA SZEROKOŚĆ)
    ========================================================================== */
 .slider-meta {
   display: flex;
-  flex-direction: column;
-  margin-top: 1rem;
+  flex-direction: row;
+  justify-content: space-between; /* Rozpycha podpis do lewej, a kropki do prawej */
+  align-items: center;
+  margin-top: 1.5rem;
   gap: 1rem;
+  width: 100%;                   /* 🟢 Wymusza rozciągnięcie na pełną szerokość obrazka */
+  box-sizing: border-box;
 }
 
-/* 🚀 ZGODNIE Z ZASADAMI: Kontener jako Grid nakładający teksty bez Position Absolute! */
+/* Kontener jako Grid nakładający teksty bez Position Absolute */
 .captions-container {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .caption-text {
-  grid-area: 1 / 1;    /* Wszystkie elementy lądują w tej samej komórce */
-  position: static;   /* Wymóg projektu - 100% static! */
+  grid-area: 1 / 1;
+  position: static; /* Całkowity brak position: absolute */
   margin: 0;
   font-size: 1.1rem;
   line-height: 1.4;
   opacity: 0;
-  visibility: hidden; /* Ukrywa nieaktywne teksty, by nie blokowały zaznaczania */
+  visibility: hidden;
   transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
 /* Kontener na kropki */
 .controls-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 /* ==========================================================================
    4. STANY INTERAKTYWNE KROPEK
    ========================================================================== */
 .control-dot {
-  position: static; 
+  position: static;
   padding: 0.5rem;
   cursor: pointer;
   display: inline-block;
 }
 
-/* 🔵 STAN BAZOWY */
+/* Stan bazowy kropki */
 .visual-dot {
   display: block;
   width: 0.8rem;
@@ -125,20 +131,20 @@ body {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* ⚪ STAN HOVER */
+/* Stan hover */
 .control-dot:hover .visual-dot {
   background-color: #ffffff;
   border-color: #ffffff;
 }
 
-/* ⚫ STAN ACTIVE */
+/* Stan active */
 .control-dot:active .visual-dot {
   background-color: transparent;
   border-color: var(--dot-color);
 }
 
 /* ==========================================================================
-   5. LOGIKA CHECKED i BLOKADA HOVERA DLA AKTYWNEJ KROPKI
+   5. LOGIKA CHECKED I BLOKADA HOVERA DLA AKTYWNEJ KROPKI
    ========================================================================== */
 
 /* Animacja przesuwania slajdów */
@@ -147,7 +153,7 @@ body {
 #slide3:checked ~ .slider-window .slides-inner { transform: translateX(-50%); }
 #slide4:checked ~ .slider-window .slides-inner { transform: translateX(-75%); }
 
-/* Pokazywanie właściwego podpisu bez użycia transform/translate (bezpieczne dla static) */
+/* Pokazywanie właściwego podpisu */
 #slide1:checked ~ .slider-meta .text-1,
 #slide2:checked ~ .slider-meta .text-2,
 #slide3:checked ~ .slider-meta .text-3,
@@ -156,7 +162,7 @@ body {
   visibility: visible;
 }
 
-/* ⚫ STAN AKTYWNY (Zaznaczony): Kropka pusta w środku, hover zablokowany */
+/* Stan aktywny (Zaznaczony): kropka pusta w środku, hover zablokowany */
 #slide1:checked ~ .slider-meta [for="slide1"] .visual-dot,
 #slide1:checked ~ .slider-meta [for="slide1"]:hover .visual-dot,
 #slide1:checked ~ .slider-meta [for="slide1"]:active .visual-dot,
@@ -172,26 +178,4 @@ body {
   background-color: transparent;
   border-color: var(--dot-color);
   cursor: default;
-}
-
-/* ==========================================================================
-   6. RESPONSYWNOŚĆ (MEDIA QUERIES)
-   ========================================================================== */
-@media (min-width: 768px) {
-  .slider-meta {
-    flex-direction: row; /* Układ liniowy na desktopie */
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1.5rem;
-  }
-
-  .captions-container {
-    order: 1;
-    width: 70%;
-  }
-
-  .controls-container {
-    order: 2;
-    justify-content: flex-end;
-  }
 }
