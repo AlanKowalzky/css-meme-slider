@@ -1,0 +1,76 @@
+:root {
+  --main-width: 80vw;
+  --max-slider-width: 40rem;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Ukrycie inputów bez display:none (żeby były w flow, ale niewidoczne) */
+.slide-input {
+  position: static;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Główny kontener - wyśrodkowany, równe marginesy */
+.slider-container {
+  position: static;
+  width: var(--main-width);
+  max-width: var(--max-slider-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.slider-window {
+  position: static;
+  width: 100%;
+  overflow: hidden; /* Obcina nadmiarowe slajdy */
+}
+
+.slides-inner {
+  position: static;
+  display: flex;
+  width: 400%; /* 4 slajdy po 100% każdy */
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.slide-item {
+  position: static;
+  width: 25%; /* Każdy slajd zajmuje dokładnie szerokość slider-window */
+}
+
+.slide-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.captions-container {
+  position: static;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.caption-text {
+  position: static;
+  grid-column: 1;
+  grid-row: 1;
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  margin: 0;
+  font-size: 1.2rem;
+}
