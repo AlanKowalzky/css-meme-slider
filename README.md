@@ -1,7 +1,7 @@
 # CSS Meme Slider
 
 ## 🔗 Live Demo
-- **GitHub Pages:** [https://alankowalzky.github.io/css-meme-slider/](https://alankowalzky.github.io/css-meme-slider/)
+- **GitHub Pages:** [https://alankowalzky.github.io/css-meme-slider/css-meme-slider/](https://alankowalzky.github.io/css-meme-slider/css-meme-slider/)
 
 ---
 
