@@ -1,161 +1,199 @@
+/* ==========================================================================
+   1. ZMIENNE I RESET
+   ========================================================================== */
 :root {
   --main-width: 80vw;
   --max-slider-width: 40rem;
+  --bg-color: #17171c;
+  --text-color: #ffffff;
+  --dot-color: #7ca9f4; /* Jasnoniebieski z gifa */
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
   margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Ukrycie inputów bez display:none (żeby były w flow, ale niewidoczne) */
+/* Ukrycie natywnych inputów radiowych */
 .slide-input {
-  position: static;
-  width: 0;
-  height: 0;
-  opacity: 0;
-  margin: 0;
-  overflow: hidden;
+  display: none;
 }
 
-/* Główny kontener - wyśrodkowany, równe marginesy */
+/* ==========================================================================
+   2. STRUKTURA I UKŁAD SLIDERA
+   ========================================================================== */
 .slider-container {
-  position: static;
   width: var(--main-width);
   max-width: var(--max-slider-width);
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
 }
 
+/* Okno kadrowania obrazu */
 .slider-window {
-  position: static;
   width: 100%;
-  overflow: hidden; /* Obcina nadmiarowe slajdy */
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 4px solid var(--text-color);
+  box-sizing: border-box;
 }
 
+/* Taśma zawierająca wszystkie slajdy obok siebie */
 .slides-inner {
-  position: static;
   display: flex;
-  width: 400%; /* 4 slajdy po 100% każdy */
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  width: 400%; /* 4 slajdy = 400% szerokości */
+  height: 100%;
+  transition: transform 0.5s ease-in-out;
 }
 
+/* Pojedynczy slajd */
 .slide-item {
-  position: static;
-  width: 25%; /* Każdy slajd zajmuje dokładnie szerokość slider-window */
+  width: 25%; /* Każdy slajd zajmuje dokładnie 1/4 taśmy */
+  height: 100%;
 }
 
 .slide-item img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
+/* ==========================================================================
+   3. METADANE: PODPISY I KONTROLER
+   ========================================================================== */
+.slider-meta {
+  display: flex;
+  flex-direction: column; /* Domyślnie pod sobą na mobile */
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+/* Kontener na teksty */
 .captions-container {
-  position: static;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-  margin-top: 1.5rem;
-  text-align: center;
+  position: relative;
+  height: 3rem; /* Rezerwacja stałej przestrzeni na tekst */
 }
 
 .caption-text {
-  position: static;
-  grid-column: 1;
-  grid-row: 1;
-  opacity: 0;
-  transform: translateY(1rem);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
+/* Kontener na kropki */
 .controls-container {
-  position: static;
   display: flex;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: 2rem;
 }
 
+/* ==========================================================================
+   4. STANY INTERAKTYWNE KROPEK
+   ========================================================================== */
 .control-dot {
-  position: static;
-  padding: 1rem; /* Duży obszar klikalny */
+  position: static; 
+  padding: 0.5rem;  /* Powiększenie obszaru klikalnego bez zmiany wyglądu */
   cursor: pointer;
   display: inline-block;
 }
 
+/* 🔵 STAN BAZOWY: Normalna, niebieska kropka */
 .visual-dot {
   display: block;
-  width: 0.75rem;
-  height: 0.75rem;
+  width: 0.8rem;
+  height: 0.8rem;
   border-radius: 50%;
-  background-color: #ccc;
-  transition: background-color 0.3s, transform 0.2s;
+  background-color: var(--dot-color);
+  border: 0.15rem solid var(--dot-color);
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* Efekty Hover i Active dla kontrolek */
+/* ⚪ STAN HOVER: Najechana kropka robi się pełna i biała */
 .control-dot:hover .visual-dot {
-  background-color: #888;
+  background-color: #ffffff;
+  border-color: #ffffff;
 }
 
+/* ⚫ STAN ACTIVE: Wciśnięcie myszką robi pusty środek */
 .control-dot:active .visual-dot {
-  transform: scale(0.8); /* Efekt wciśnięcia */
+  background-color: transparent;
+  border-color: var(--dot-color);
 }
 
-/* Przesunięcie slajdów */
-#slide1:checked ~ .slider-window .slides-inner { transform: translateX(0%); }
+/* ==========================================================================
+   5. LOGIKA CHECKED (PRZEŁĄCZANIE I BLOKADA STANU AKTYWNEGO)
+   ========================================================================== */
+
+/* Animacja przesuwania slajdów */
+#slide1:checked ~ .slider-window .slides-inner { transform: translateX(0); }
 #slide2:checked ~ .slider-window .slides-inner { transform: translateX(-25%); }
 #slide3:checked ~ .slider-window .slides-inner { transform: translateX(-50%); }
 #slide4:checked ~ .slider-window .slides-inner { transform: translateX(-75%); }
 
-/* Widoczność podpisów */
-#slide1:checked ~ .captions-container .text-1,
-#slide2:checked ~ .captions-container .text-2,
-#slide3:checked ~ .captions-container .text-3,
-#slide4:checked ~ .captions-container .text-4 {
+/* Pokazywanie właściwego podpisu */
+#slide1:checked ~ .slider-meta .text-1,
+#slide2:checked ~ .slider-meta .text-2,
+#slide3:checked ~ .slider-meta .text-3,
+#slide4:checked ~ .slider-meta .text-4 {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Aktywny wskaźnik slajdu */
-#slide1:checked ~ .controls-container [for="slide1"] .visual-dot,
-#slide2:checked ~ .controls-container [for="slide2"] .visual-dot,
-#slide3:checked ~ .controls-container [for="slide3"] .visual-dot,
-#slide4:checked ~ .controls-container [for="slide4"] .visual-dot {
-  background-color: #007bff; /* Kolor aktywnego indykatora */
-  transform: scale(1.2);
+/* ⚫ STAN DOMYŚLNY / AKTYWNY (Checked): Pusty okrąg ("czarna kropka") 
+   Dodany :hover i :active gwarantuje, że po zaznaczeniu kropka NIE zmieni koloru na biały */
+#slide1:checked ~ .slider-meta [for="slide1"] .visual-dot,
+#slide1:checked ~ .slider-meta [for="slide1"]:hover .visual-dot,
+#slide1:checked ~ .slider-meta [for="slide1"]:active .visual-dot,
+#slide2:checked ~ .slider-meta [for="slide2"] .visual-dot,
+#slide2:checked ~ .slider-meta [for="slide2"]:hover .visual-dot,
+#slide2:checked ~ .slider-meta [for="slide2"]:active .visual-dot,
+#slide3:checked ~ .slider-meta [for="slide3"] .visual-dot,
+#slide3:checked ~ .slider-meta [for="slide3"]:hover .visual-dot,
+#slide3:checked ~ .slider-meta [for="slide3"]:active .visual-dot,
+#slide4:checked ~ .slider-meta [for="slide4"] .visual-dot,
+#slide4:checked ~ .slider-meta [for="slide4"]:hover .visual-dot,
+#slide4:checked ~ .slider-meta [for="slide4"]:active .visual-dot {
+  background-color: transparent;
+  border-color: var(--dot-color);
+  cursor: default;
 }
 
-📱 Krok 6: Responsywność (Media Queries)
-Jednostki px są dozwolone tylko w regułach @media. Układ na desktopie i mobile różni się kolejnością elementów (np. napisy pod kontrolkami lub odwrotnie) – najwygodniej zarządzać tym poprzez właściwość order we Flexboksie kontenera głównego.
+/* ==========================================================================
+   6. RESPONSYWNOŚĆ (MEDIA QUERIES)
+   ========================================================================== */
+@media (min-width: 768px) {
+  .slider-meta {
+    flex-direction: row; /* Tekst po lewej, kropki po prawej */
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
 
-CSS
-/* Wersja mobilna (Sprawdzana od 500px wzwyż) */
-@media (min-width: 500px) {
-  .slider-container {
-    padding: 10px; /* Dozwolone px wewnątrz media queries */
-  }
-  .caption-text {
-    font-size: 1rem;
-  }
-}
-
-/* Wersja desktopowa (Sprawdzana od 1024px wzwyż) */
-@media (min-width: 1024px) {
-  .slider-container {
-    max-width: 60rem;
-  }
-  /* Przykładowa zmiana kolejności elementów na desktopie, jeśli design tego wymaga: */
   .captions-container {
-    order: 2;
+    order: 1; /* Tekst ląduje jako pierwszy z lewej */
+    width: 70%;
   }
+
   .controls-container {
-    order: 3;
+    order: 2; /* Kropki lądują jako drugie z prawej */
+    justify-content: flex-end;
   }
 }

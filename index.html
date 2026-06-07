@@ -3,39 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="normalize.css">
-  <link rel="stylesheet" href="style.css">
   <title>CSS Meme Slider</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <main class="slider-container">
-    <input type="radio" name="slider" id="slide1" checked class="slide-input">
+    <input type="radio" name="slider" id="slide1" class="slide-input" checked>
     <input type="radio" name="slider" id="slide2" class="slide-input">
     <input type="radio" name="slider" id="slide3" class="slide-input">
     <input type="radio" name="slider" id="slide4" class="slide-input">
 
     <section class="slider-window">
       <div class="slides-inner">
-        <div class="slide-item"><img src="meme1.gif" alt="Meme 1"></div>
+        <div class="slide-item"><img src="meme1.jpg" alt="Meme 1"></div>
         <div class="slide-item"><img src="meme2.png" alt="Meme 2"></div>
         <div class="slide-item"><img src="meme3.png" alt="Meme 3"></div>
         <div class="slide-item"><img src="meme4.png" alt="Meme 4"></div>
       </div>
     </section>
 
-    <section class="captions-container">
-      <p class="caption-text text-1">When CSS works on the first try</p>
-      <p class="caption-text text-2">When you forget about position: static</p>
-      <p class="caption-text text-3">Code reviewer vs My strict commits</p>
-      <p class="caption-text text-4">Finishing the project without a single line of JS</p>
-    </section>
+    <div class="slider-meta">
+      <section class="captions-container">
+        <p class="caption-text text-1">When CSS works on the first try</p>
+        <p class="caption-text text-2">When you forget about position: static</p>
+        <p class="caption-text text-3">Code reviewer vs My strict commits</p>
+        <p class="caption-text text-4">Finishing the project without a single line of JS</p>
+      </section>
 
-    <nav class="controls-container">
-      <label encoding="utf-8" for="slide1" class="control-dot"><span class="visual-dot"></span></label>
-      <label encoding="utf-8" for="slide2" class="control-dot"><span class="visual-dot"></span></label>
-      <label encoding="utf-8" for="slide3" class="control-dot"><span class="visual-dot"></span></label>
-      <label encoding="utf-8" for="slide4" class="control-dot"><span class="visual-dot"></span></label>
-    </nav>
+      <nav class="controls-container">
+        <label for="slide1" class="control-dot"><span class="visual-dot"></span></label>
+        <label for="slide2" class="control-dot"><span class="visual-dot"></span></label>
+        <label for="slide3" class="control-dot"><span class="visual-dot"></span></label>
+        <label for="slide4" class="control-dot"><span class="visual-dot"></span></label>
+      </nav>
+    </div>
+
   </main>
+
 </body>
 </html>
