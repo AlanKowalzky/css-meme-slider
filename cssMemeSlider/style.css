@@ -12,7 +12,7 @@
 
 body {
   margin: 0;
-  padding: 0;
+  padding: 1rem; /* Dodany oddech dla mobile */
   background-color: var(--bg-color);
   color: var(--text-color);
   font-family: var(--font-family);
@@ -21,9 +21,9 @@ body {
   align-items: center;
   min-height: 100vh;
   overflow-x: hidden;
+  box-sizing: border-box;
 }
 
-/* Ukrycie natywnych inputów radiowych */
 .slide-input {
   display: none;
 }
@@ -32,13 +32,12 @@ body {
    2. STRUKTURA I UKŁAD SLIDERA
    ========================================================================== */
 .slider-container {
-  width: var(--main-width);
+  width: 100%;
   max-width: var(--max-slider-width);
   display: flex;
   flex-direction: column;
 }
 
-/* Okno kadrowania obrazu - zaokrąglone rogi bez białej ramki */
 .slider-window {
   width: 100%;
   overflow: hidden;
@@ -47,7 +46,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Taśma zawierająca wszystkie slajdy obok siebie */
 .slides-inner {
   display: flex;
   width: 400%;
@@ -55,12 +53,10 @@ body {
   transition: transform 0.5s ease-in-out;
 }
 
-/* Pojedynczy slajd */
 .slide-item {
   width: 25%;
 }
 
-/* Obrazek - dopasowuje wysokość automatycznie, zachowując proporcje */
 .slide-item img {
   width: 100%;
   height: auto;
@@ -68,20 +64,19 @@ body {
 }
 
 /* ==========================================================================
-   3. METADANE: PODPISY I KONTROLER (POPRAWIONA SZEROKOŚĆ)
+   3. METADANE: PODPISY I KONTROLER
    ========================================================================== */
 .slider-meta {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between; /* Rozpycha podpis do lewej, a kropki do prawej */
+  flex-direction: row; /* Domyślnie desktop */
+  justify-content: space-between;
   align-items: center;
   margin-top: 1.5rem;
   gap: 1rem;
-  width: 100%;                   /* 🟢 Wymusza rozciągnięcie na pełną szerokość obrazka */
+  width: 100%;
   box-sizing: border-box;
 }
 
-/* Kontener jako Grid nakładający teksty bez Position Absolute */
 .captions-container {
   display: grid;
   grid-template-columns: 1fr;
@@ -92,7 +87,7 @@ body {
 
 .caption-text {
   grid-area: 1 / 1;
-  position: static; /* Całkowity brak position: absolute */
+  position: static;
   margin: 0;
   font-size: 1.1rem;
   line-height: 1.4;
@@ -101,7 +96,6 @@ body {
   transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
-/* Kontener na kropki */
 .controls-container {
   display: flex;
   justify-content: flex-end;
@@ -119,7 +113,6 @@ body {
   display: inline-block;
 }
 
-/* Stan bazowy kropki */
 .visual-dot {
   display: block;
   width: 0.8rem;
@@ -131,29 +124,25 @@ body {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* Stan hover */
 .control-dot:hover .visual-dot {
   background-color: #ffffff;
   border-color: #ffffff;
 }
 
-/* Stan active */
 .control-dot:active .visual-dot {
   background-color: transparent;
   border-color: var(--dot-color);
 }
 
 /* ==========================================================================
-   5. LOGIKA CHECKED I BLOKADA HOVERA DLA AKTYWNEJ KROPKI
+   5. LOGIKA CHECKED I RESPONSYWNOŚĆ
    ========================================================================== */
 
-/* Animacja przesuwania slajdów */
 #slide1:checked ~ .slider-window .slides-inner { transform: translateX(0); }
 #slide2:checked ~ .slider-window .slides-inner { transform: translateX(-25%); }
 #slide3:checked ~ .slider-window .slides-inner { transform: translateX(-50%); }
 #slide4:checked ~ .slider-window .slides-inner { transform: translateX(-75%); }
 
-/* Pokazywanie właściwego podpisu */
 #slide1:checked ~ .slider-meta .text-1,
 #slide2:checked ~ .slider-meta .text-2,
 #slide3:checked ~ .slider-meta .text-3,
@@ -162,19 +151,22 @@ body {
   visibility: visible;
 }
 
-/* Stan aktywny (Zaznaczony): kropka pusta w środku, hover zablokowany */
+/* Media Query dla Mobile */
+@media (max-width: 480px) {
+  .slider-meta {
+    flex-direction: column; /* Pionowy układ na mobile */
+    text-align: center;
+  }
+  .controls-container {
+    justify-content: center;
+  }
+}
+
+/* Blokada hovera dla aktywnej kropki */
 #slide1:checked ~ .slider-meta [for="slide1"] .visual-dot,
-#slide1:checked ~ .slider-meta [for="slide1"]:hover .visual-dot,
-#slide1:checked ~ .slider-meta [for="slide1"]:active .visual-dot,
 #slide2:checked ~ .slider-meta [for="slide2"] .visual-dot,
-#slide2:checked ~ .slider-meta [for="slide2"]:hover .visual-dot,
-#slide2:checked ~ .slider-meta [for="slide2"]:active .visual-dot,
 #slide3:checked ~ .slider-meta [for="slide3"] .visual-dot,
-#slide3:checked ~ .slider-meta [for="slide3"]:hover .visual-dot,
-#slide3:checked ~ .slider-meta [for="slide3"]:active .visual-dot,
-#slide4:checked ~ .slider-meta [for="slide4"] .visual-dot,
-#slide4:checked ~ .slider-meta [for="slide4"]:hover .visual-dot,
-#slide4:checked ~ .slider-meta [for="slide4"]:active .visual-dot {
+#slide4:checked ~ .slider-meta [for="slide4"] .visual-dot {
   background-color: transparent;
   border-color: var(--dot-color);
   cursor: default;
