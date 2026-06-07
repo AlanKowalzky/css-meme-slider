@@ -107,3 +107,27 @@ body {
 .control-dot:active .visual-dot {
   transform: scale(0.8); /* Efekt wciśnięcia */
 }
+
+/* Przesunięcie slajdów */
+#slide1:checked ~ .slider-window .slides-inner { transform: translateX(0%); }
+#slide2:checked ~ .slider-window .slides-inner { transform: translateX(-25%); }
+#slide3:checked ~ .slider-window .slides-inner { transform: translateX(-50%); }
+#slide4:checked ~ .slider-window .slides-inner { transform: translateX(-75%); }
+
+/* Widoczność podpisów */
+#slide1:checked ~ .captions-container .text-1,
+#slide2:checked ~ .captions-container .text-2,
+#slide3:checked ~ .captions-container .text-3,
+#slide4:checked ~ .captions-container .text-4 {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Aktywny wskaźnik slajdu */
+#slide1:checked ~ .controls-container [for="slide1"] .visual-dot,
+#slide2:checked ~ .controls-container [for="slide2"] .visual-dot,
+#slide3:checked ~ .controls-container [for="slide3"] .visual-dot,
+#slide4:checked ~ .controls-container [for="slide4"] .visual-dot {
+  background-color: #007bff; /* Kolor aktywnego indykatora */
+  transform: scale(1.2);
+}
